@@ -1,0 +1,5 @@
+ray[serve]==2.38.0
+vllm==0.6.2
+prometheus_client==0.21.0
+fastapi==0.115.0
+uvicorn==0.31.0

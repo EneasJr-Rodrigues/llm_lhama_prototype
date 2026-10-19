@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  ray-worker:
+    build: .
+    container_name: ray-worker-node
+    # Substitua "IP_DO_SERVIDOR_1" pelo IP interno real da máquina 1 na rede da CRP Tecnologia
+    command: >
+      ray start --address='IP_DO_SERVIDOR_1:6379' 
+      --block
+    network_mode: "host"
+    shm_size: '16gb'
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
