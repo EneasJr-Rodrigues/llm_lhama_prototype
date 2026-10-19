@@ -1,20 +1,18 @@
 version: '3.8'
 
 services:
-  ray-head:
+  ray-worker:
     build: .
-    container_name: ray-head-node
-    # Inicia o Ray como Head Node e bloqueia o terminal para o container não morrer
-    command: ray start --head --port=6379 --dashboard-host=0.0.0.0 --block
-    # network_mode "host" é o SEGREDO para clusters multi-node no Docker. 
-    # Ele faz o container usar o IP real da máquina, evitando lentidão e bloqueios de rede.
+    container_name: ray-worker-node
+    # O Worker não usa --head. Ele se conecta ao IP que o bash exportou.
+    command: ray start --address='${HEAD_NODE_IP}:6379' --block
     network_mode: "host" 
-    # Memória RAM compartilhada: Vital para o vLLM passar tensores rapidamente
     shm_size: '16gb' 
     environment:
-          - HF_TOKEN=${HF_TOKEN} # Repassa o token da máquina física para o container
+      - HF_TOKEN=${HF_TOKEN}
+      - MODEL_NAME=meta-llama/Meta-Llama-3.1-8B-Instruct
     volumes:
-      - ./model_cache:/app/model_cache # Mapeia a pasta local para não baixar de novo
+      - ./model_cache:/app/model_cache
     deploy:
       resources:
         reservations:

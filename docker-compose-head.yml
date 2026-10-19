@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   ray-head:
     build: .
@@ -6,9 +8,10 @@ services:
     network_mode: "host"
     shm_size: '16gb'
     environment:
-      - HF_TOKEN=${HF_TOKEN} # Repassa o token da máquina física para o container
+      - HF_TOKEN=${HF_TOKEN}
+      - MODEL_NAME=meta-llama/Meta-Llama-3.1-8B-Instruct
     volumes:
-      - ./model_cache:/app/model_cache # Mapeia a pasta local para não baixar de novo
+      - ./model_cache:/app/model_cache
     deploy:
       resources:
         reservations:
