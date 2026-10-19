@@ -1,0 +1,18 @@
+services:
+  ray-head:
+    build: .
+    container_name: ray-head-node
+    command: ray start --head --port=6379 --dashboard-host=0.0.0.0 --block
+    network_mode: "host"
+    shm_size: '16gb'
+    environment:
+      - HF_TOKEN=${HF_TOKEN} # Repassa o token da máquina física para o container
+    volumes:
+      - ./model_cache:/app/model_cache # Mapeia a pasta local para não baixar de novo
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]

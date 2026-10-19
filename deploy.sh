@@ -41,6 +41,21 @@ elif [ "$ROLE" == "worker" ]; then
     
     # Exporta o IP para que o docker-compose-worker.yml consiga ler a variável
     export HEAD_NODE_IP=$HEAD_IP
+
+    echo -e "${BLUE}--- Etapa de Cache do Modelo ---${NC}"
+    # Exige que o analista passe o token como variável antes de executar o bash
+    if [ -z "$HF_TOKEN" ]; then
+        echo -e "${RED}Erro: A variável HF_TOKEN não está definida.${NC}"
+        echo "Rode o comando exportando o token. Exemplo:"
+        echo "export HF_TOKEN='hf_XyZaBc...' && ./deploy.sh head"
+        exit 1
+    fi
+
+    echo "Verificando/Baixando os pesos do modelo (Aguarde...)"
+    # Usa o próprio Docker para rodar o script de download temporariamente e salvar na pasta model_cache
+    docker compose -f docker-compose-head.yml run --rm ray-head python3 /app/download_hf.py
+
+    echo -e "${GREEN}Modelo validado em cache local! Subindo a infraestrutura...${NC}"
     
     echo "Fazendo o build da imagem Docker..."
     docker compose -f docker-compose-worker.yml build
