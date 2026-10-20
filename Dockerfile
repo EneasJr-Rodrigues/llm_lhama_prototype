@@ -11,9 +11,17 @@ RUN apt-get update && apt-get install -y \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-# Atualiza o pip e instala o Ray, vLLM, Prometheus, e agora o Streamlit para a UI
-RUN pip3 install --upgrade pip && \
-    pip3 install --no-cache-dir "ray[serve]" vllm prometheus_client streamlit requests
+# 1. Atualiza o gerenciador de pacotes
+RUN pip3 install --upgrade pip
+
+# 2. Instala o Ray separadamente (Salva a Camada 1 no cache)
+RUN pip3 install --no-cache-dir "ray[serve]"
+
+# 3. Instala o vLLM e suas dependências pesadas (Salva a Camada 2 no cache)
+RUN pip3 install --no-cache-dir vllm
+
+# 4. Instala as bibliotecas da interface e métricas (Salva a Camada 3 no cache)
+RUN pip3 install --no-cache-dir prometheus_client streamlit requests
 
 # Define a pasta de trabalho dentro do container
 WORKDIR /app
