@@ -5,12 +5,15 @@ services:
     build: .
     container_name: ray-local-test
     command: ray start --head --port=6379 --dashboard-host=0.0.0.0 --block
-    network_mode: "host"
+    ports:
+      - "8000:8000"
+      - "8501:8501"
     shm_size: '8gb' # 8GB de RAM compartilhada é suficiente para testes locais
     environment:
       - MODEL_NAME=Qwen/Qwen2.5-3B-Instruct
     volumes:
       - ./model_cache:/app/model_cache
+      - ./logs:/app/logs
     deploy:
       resources:
         reservations:

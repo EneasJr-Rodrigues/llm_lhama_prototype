@@ -1,77 +1,98 @@
-# run_test.py
-import time
 import requests
+import time
 import json
-import os
 import argparse
+import os
 from datetime import datetime
 
-# Configuração de parâmetros via terminal
-parser = argparse.ArgumentParser(description="Script de Teste de Carga e Evidência do vLLM")
-parser.add_argument("--nome", type=str, default="teste_1", help="Nome do teste para versionamento (ex: teste_1)")
-parser.add_argument("--reqs", type=int, default=5, help="Número de requisições sequenciais/concorrentes")
+# Configuração dos argumentos da linha de comando
+parser = argparse.ArgumentParser()
+parser.add_argument("--nome", type=str, default="teste_homologacao")
+parser.add_argument("--reqs", type=int, default=5)
 args = parser.parse_args()
 
 URL_API = "http://127.0.0.1:8000/gerar"
-PROMPT_TESTE = "Explique detalhadamente como funciona um motor de combustão interna, passo a passo."
+resultados = []
 
-os.makedirs("logs", exist_ok=True)
+print(f"🚀 Iniciando {args.reqs} requisições de estresse contra a API Local...")
 
-print(f"🚀 Iniciando [{args.nome}] com {args.reqs} requisições...")
-resultados_individuais = []
-inicio_teste = time.time()
-tokens_totais = 0
+# Variáveis para calcular as métricas gerais do painel
+inicio_teste_geral = time.time()
+total_latencia = 0
+total_tokens = 0
+sucessos = 0
 
 for i in range(args.reqs):
+    payload = {
+        "prompt": "Explique o que é Inteligência Artificial em um parágrafo curto.",
+        "temperature": 0.7,
+        "max_tokens": 512
+    }
+    
     inicio_req = time.time()
     try:
-        payload = {"prompt": PROMPT_TESTE}
-        res = requests.post(URL_API, json=payload)
+        res = requests.post(URL_API, json=payload, timeout=60)
         fim_req = time.time()
         
-        resposta_texto = res.json().get("resposta", "")
-        # Estimativa simples: 1 palavra ~= 1.3 tokens
-        tokens_estimados = len(resposta_texto.split()) * 1.3 
-        tokens_totais += tokens_estimados
-        latencia = fim_req - inicio_req
-        
-        resultados_individuais.append({
-            "requisicao_id": i + 1,
-            "status": res.status_code,
-            "latencia_segundos": round(latencia, 2),
-            "tokens_gerados": round(tokens_estimados),
-            "tps_local": round(tokens_estimados / latencia, 2) if latencia > 0 else 0,
-            "resposta_preview": resposta_texto[:150] + "..." # Salva o comecinho para provar que respondeu certo
-        })
-        print(f"  ↳ Req {i+1} OK! Latência: {round(latencia, 2)}s | Tokens: {round(tokens_estimados)}")
-    
+        if res.status_code == 200:
+            resposta_texto = res.json().get("resposta", "")
+            latencia = round(fim_req - inicio_req, 2)
+            
+            # Estimativa de tokens gerados
+            tokens_gerados = int(len(resposta_texto.split()) * 1.3)
+            tps = round(tokens_gerados / latencia, 2) if latencia > 0 else 0
+            
+            # Soma para o resumo final
+            total_latencia += latencia
+            total_tokens += tokens_gerados
+            sucessos += 1
+            
+            resultados.append({
+                "requisicao_id": i + 1,
+                "status": "Sucesso",
+                "latencia_segundos": latencia,
+                "tokens_gerados": tokens_gerados,
+                "tps_local": tps,
+                "resposta_preview": resposta_texto[:60].replace("\n", " ") + "..."
+            })
+            print(f"✅ Req #{i+1} | Latência: {latencia}s | TPS: {tps} tokens/s")
+        else:
+            raise Exception(f"Erro HTTP {res.status_code}")
+            
     except Exception as e:
-        print(f"  ↳ Req {i+1} ERRO: {str(e)}")
-        resultados_individuais.append({"requisicao_id": i+1, "status": "Erro", "erro": str(e)})
+        resultados.append({
+            "requisicao_id": i + 1,
+            "status": "Erro",
+            "latencia_segundos": 0,
+            "tokens_gerados": 0,
+            "tps_local": 0,
+            "resposta_preview": str(e)
+        })
+        print(f"❌ Req #{i+1} | FALHA | {str(e)}")
 
-fim_teste = time.time()
-tempo_total_teste = fim_teste - inicio_teste
-throughput_global = tokens_totais / tempo_total_teste if tempo_total_teste > 0 else 0
-latencia_media = tempo_total_teste / args.reqs
+# Cálculo das métricas consolidadas
+tempo_total = round(time.time() - inicio_teste_geral, 2)
+latencia_media = round(total_latencia / sucessos, 2) if sucessos > 0 else 0
+throughput_total = round(total_tokens / tempo_total, 2) if tempo_total > 0 else 0
 
-# Monta o JSON de evidência estruturada
-evidencia = {
+os.makedirs("logs", exist_ok=True)
+nome_arquivo = f"logs/{args.nome}.json"
+
+# Estrutura exata exigida pelo dashboard.html
+dados_finais = {
     "versao_teste": args.nome,
     "data_execucao": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-    "modelo_alvo": "Llama-3.1-8B-Instruct (PT-BR)",
+    "modelo_alvo": "Qwen2.5-3B-Instruct (Local / RTX 2080 Ti)",
     "resumo_metricas": {
         "total_requisicoes": args.reqs,
-        "tempo_total_segundos": round(tempo_total_teste, 2),
-        "latencia_media_segundos": round(latencia_media, 2),
-        "throughput_total_tps": round(throughput_global, 2),
-        "total_tokens_processados": round(tokens_totais)
+        "throughput_total_tps": throughput_total,
+        "latencia_media_segundos": latencia_media,
+        "tempo_total_segundos": tempo_total
     },
-    "logs_detalhados": resultados_individuais
+    "logs_detalhados": resultados
 }
 
-# Salva o arquivo
-caminho_arquivo = f"logs/{args.nome}.json"
-with open(caminho_arquivo, "w", encoding="utf-8") as f:
-    json.dump(evidencia, f, ensure_ascii=False, indent=4)
+with open(nome_arquivo, "w", encoding="utf-8") as f:
+    json.dump(dados_finais, f, ensure_ascii=False, indent=4)
 
-print(f"\n✅ Teste finalizado! Evidência gerada e salva em: {caminho_arquivo}")
+print(f"\n✅ Teste finalizado! Arquivo salvo com sucesso em: {nome_arquivo}")

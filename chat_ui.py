@@ -12,7 +12,7 @@ if "mensagens" not in st.session_state:
 
 # --- BARRA LATERAL (CONFIGURAÇÕES) ---
 with st.sidebar:
-    st.image("https://img.shields.io/badge/vLLM-Ray_Cluster-00BCD4?style=for-the-badge", use_column_width=True)
+    st.image("https://img.shields.io/badge/vLLM-Ray_Cluster-00BCD4?style=for-the-badge", use_container_width=True)
     st.title("⚙️ Parâmetros do Modelo")
     st.markdown("Ajuste o comportamento do LLM em tempo real.")
     
