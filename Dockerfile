@@ -11,15 +11,15 @@ RUN apt-get update && apt-get install -y \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-# Atualiza o pip e instala o Ray (com módulo Serve), vLLM e o Prometheus para o nosso Dashboard
+# Atualiza o pip e instala o Ray, vLLM, Prometheus, e agora o Streamlit para a UI
 RUN pip3 install --upgrade pip && \
-    pip3 install --no-cache-dir "ray[serve]" vllm prometheus_client
+    pip3 install --no-cache-dir "ray[serve]" vllm prometheus_client streamlit requests
 
 # Define a pasta de trabalho dentro do container
 WORKDIR /app
 
 # Copia o script Python de deployment (que criaremos abaixo)
-COPY deploy.py /app/deploy.py
+COPY *.py /app/
 
 # Expõe as portas: 
 # 6379 (Comunicação do Cluster Ray)

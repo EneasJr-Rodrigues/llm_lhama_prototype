@@ -1,4 +1,4 @@
-# MVP LLM Multi-Node (CRP Tecnologia)
+# MVP LLM Multi-Node
 
 ![NVIDIA](https://img.shields.io/badge/NVIDIA_V100-76B900?style=for-the-badge&logo=nvidia&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
@@ -14,6 +14,7 @@ Antes de clonar este projeto, certifique-se de que cada servidor possui:
 1. Drivers da NVIDIA instalados (`nvidia-smi` respondendo).
 2. Docker instalado.
 3. NVIDIA Container Toolkit instalado (para o Docker enxergar a GPU).
+4. Conta no Hugging Face com acesso liberado ao modelo Llama 3.1 e um Token de Acesso (apenas para os servidores de produção).
 
 > **Atenção:** Como utilizamos Docker, **não é necessário** criar uma `venv` ou instalar o Python no servidor físico. O contêiner já gerencia todas as dependências do `requirements.txt`.
 
@@ -28,6 +29,9 @@ git clone <url-do-repositorio>
 cd mvp-llm
 chmod +x deploy.sh
 
+# Exporte seu token do Hugging Face (Obrigatório para baixar o Llama 3.1)
+export HF_TOKEN="hf_seu_token_aqui"
+
 # Inicia o servidor principal
 ./deploy.sh head
 ```
@@ -41,8 +45,26 @@ git clone <url-do-repositorio>
 cd mvp-llm
 chmod +x deploy.sh
 
+# Exporte o token também nos workers (pois cada placa baixará seu próprio cache)
+export HF_TOKEN="hf_seu_token_aqui"
+
 # Substitua o IP abaixo pelo IP real do Servidor 1
 ./deploy.sh worker 10.0.0.50
+```
+
+### 💻 Ambiente de Teste Local (WSL2 / Windows)
+Para validar a arquitetura localmente em placas de vídeo menores (ex: RTX 2080 Ti), o sistema contornará a restrição de memória utilizando um modelo menor e aberto (`Qwen-2.5-3B-Instruct`), sem a necessidade de Token do Hugging Face.
+
+1. Abra seu terminal WSL2 (Ubuntu).
+2. Clone o repositório e dê permissão de execução: `chmod +x deploy.sh`
+3. Execute o comando local:
+   ```bash
+   ./deploy.sh local
+   ```
+4. Suba a API no container local utilizando o script de teste:
+
+```bash
+docker exec -it ray-local-test serve run deploy_local:servico
 ```
 
 ### Passo 3: Inicializar o Modelo

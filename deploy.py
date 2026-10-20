@@ -3,6 +3,8 @@ from ray import serve
 from vllm.engine.arg_utilss import AsyncEngineArgs
 from vllm.engine.async_llm_engine import AsyncLLMEngine
 from fastapi import FastAPI, Request
+import uuid
+from vllm import SamplingParams
 
 # Criar a API FastAPI
 app = FastAPI()
@@ -26,22 +28,20 @@ class VLLMDeployment:
     async def gerar_texto(self, request: Request):
         dados = await request.json()
         prompt = dados.get("prompt")
-
-        # Gerar um ID único para a requisição
-        import uuid
+        
+        # Aceita os parâmetros do Streamlit dinamicamente
+        temperatura = dados.get("temperature", 0.7)
+        max_tokens = dados.get("max_tokens", 1024)
+        
         request_id = str(uuid.uuid4())
-
-        # Parämetros de geração (Temperatura, etc)
-        from vllm import SamplingParams
-        sampling_params = SamplingParams(temperature=0.7, max_tokens=1024)
-
-        # Inicia a Geração
+        sampling_params = SamplingParams(temperature=temperatura, max_tokens=max_tokens)
+        
         resultados = self.engine.generate(prompt, sampling_params, request_id)
-
+        
         texto_final = ""
         async for output in resultados:
             texto_final = output.outputs[0].text
-
+            
         return {"resposta": texto_final}
 
 # Inicializa o deployment

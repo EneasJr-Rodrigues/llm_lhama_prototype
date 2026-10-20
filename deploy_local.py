@@ -14,11 +14,12 @@ app = FastAPI()
 class VLLMDeploymentLocal:
     def __init__(self):
         engine_args = AsyncEngineArgs(
-            model="Qwen/Qwen2.5-3B-Instruct", # Modelo menor para caber na 2080 Ti
-            dtype="half",                     # Compatível com a arquitetura Turing (RTX 20)
-            gpu_memory_utilization=0.85,      # Deixa 15% de VRAM livre para o Windows/Interface gráfica
-            max_model_len=4096,               # Contexto reduzido para poupar o KV Cache
-            tensor_parallel_size=1
+            model="Qwen/Qwen2.5-3B-Instruct",
+            dtype="half",
+            gpu_memory_utilization=0.65, # Ajuste fino para sobrar VRAM pro Windows
+            max_model_len=1024,          # Mantém o cache baixo para não congelar
+            tensor_parallel_size=1,
+            enforce_eager=True           # Bloqueia a compilação que trava o WSL2
         )
         self.engine = AsyncLLMEngine.from_engine_args(engine_args)
 
@@ -27,8 +28,13 @@ class VLLMDeploymentLocal:
         dados = await request.json()
         prompt = dados.get("prompt")
         
+        # Pega os parâmetros do JSON, ou usa um padrão se vier vazio
+        temperatura = dados.get("temperature", 0.7)
+        max_tokens = dados.get("max_tokens", 1024)
+        
         request_id = str(uuid.uuid4())
-        sampling_params = SamplingParams(temperature=0.7, max_tokens=1024)
+        # Agora o vLLM obedece o que vier da tela do Streamlit
+        sampling_params = SamplingParams(temperature=temperatura, max_tokens=max_tokens)
         
         resultados = self.engine.generate(prompt, sampling_params, request_id)
         
