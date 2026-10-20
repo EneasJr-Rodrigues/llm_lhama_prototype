@@ -14,6 +14,8 @@ args = parser.parse_args()
 URL_API = "http://127.0.0.1:8000/gerar"
 resultados = []
 
+MODELO_ATUAL = os.getenv("LLM_MODEL", "Qwen/Qwen2.5-3B-Instruct")
+
 print(f"🚀 Iniciando {args.reqs} requisições de estresse contra a API Local...")
 
 # Variáveis para calcular as métricas gerais do painel
@@ -82,7 +84,7 @@ nome_arquivo = f"logs/{args.nome}.json"
 dados_finais = {
     "versao_teste": args.nome,
     "data_execucao": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-    "modelo_alvo": "Qwen2.5-3B-Instruct (Local / RTX 2080 Ti)",
+    "modelo_alvo": MODELO_ATUAL,
     "resumo_metricas": {
         "total_requisicoes": args.reqs,
         "throughput_total_tps": throughput_total,

@@ -1,0 +1,16 @@
+[
+    {
+        "timestamp": "2026-10-20 19:30:16",
+        "parametros": {
+            "temperatura": 0.2,
+            "max_tokens": 2000
+        },
+        "prompt": "A cada quanto tempo temos o ano bissexto a partir de hoje ?",
+        "resposta_preview": " - Perguntas e Respostas - 2022 A cada quanto tempo temos o ano bissexto a partir de hoje? A cada 4 anos temos um ano bissexto. No entanto, existem al...",
+        "metricas_reais": {
+            "latencia_segundos": 39.11,
+            "tokens_estimados": 757,
+            "tps_local": 19.36
+        }
+    }
+]

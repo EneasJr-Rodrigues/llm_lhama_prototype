@@ -80,6 +80,27 @@ docker exec -it ray-head-node serve run deploy:servico
 - **Interface Chat (Streamlit):** `http://<IP_DO_SERVIDOR_1>:8501` (ou `http://localhost:8501` se rodando localmente)
 - **Painel de Evidências (Métricas):** Abra o arquivo local `dashboard.html` diretamente no seu navegador Windows.
 
+## 🔄 Como Trocar de Modelo (Hot-Swap)
+A arquitetura foi construída de forma parametrizada. Para trocar o motor de inteligência artificial, você não precisa alterar o código, basta definir a variável de ambiente `LLM_MODEL` antes de iniciar o cluster.
+
+### Exemplos de Modelos Suportados
+* **Qwen 2.5 (3B):** `Qwen/Qwen2.5-3B-Instruct` (Ideal para testes locais com baixa VRAM).
+* **Llama 3.1 (8B):** `meta-llama/Llama-3.1-8B-Instruct` (Recomendado para produção nas GPUs V100).
+* **Gemma 2 (9B):** `google/gemma-2-9b-it` (Alternativa de alto desempenho).
+
+### Como executar a troca:
+1. Pare os contêineres atuais.
+2. Exporte a variável com o nome exato do repositório no Hugging Face:
+   ```bash
+   export LLM_MODEL="meta-llama/Llama-3.1-8B-Instruct"
+   ```
+3. Suba o ambiente novamente
+   ```bash
+   ./deploy.sh local   # Ou ./deploy.sh head (para produção)
+   ```
+
+O sistema fará o download do novo modelo automaticamente (armazenando no cache) e o Streamlit e o Dashboard atualizarão seus rótulos para o novo modelo ativo.
+
 ## 🖥️ Interface Gráfica e Testes de Estresse
 
 ### 1. Interface Chatbot (Streamlit)

@@ -9,10 +9,13 @@ services:
     network_mode: "host" 
     shm_size: '16gb' 
     environment:
+      - LLM_MODEL=${LLM_MODEL}
       - HF_TOKEN=${HF_TOKEN}
-      - MODEL_NAME=meta-llama/Meta-Llama-3.1-8B-Instruct
+    env_file:
+      - .env
     volumes:
       - ./model_cache:/app/model_cache
+      - ./logs:/app/logs
     deploy:
       resources:
         reservations:

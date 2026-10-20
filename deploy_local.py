@@ -5,8 +5,12 @@ from vllm.engine.async_llm_engine import AsyncLLMEngine
 from fastapi import FastAPI, Request
 import uuid
 from vllm import SamplingParams
+import os
 
 app = FastAPI()
+
+# Puxa o modelo do ambiente ou usa o padrão
+MODELO_ATUAL = os.getenv("LLM_MODEL", "Qwen/Qwen2.5-3B-Instruct")
 
 # Para o teste local, usamos apenas 1 réplica
 @serve.deployment(num_replicas=1, ray_actor_options={"num_gpus": 1})
@@ -14,10 +18,10 @@ app = FastAPI()
 class VLLMDeploymentLocal:
     def __init__(self):
         engine_args = AsyncEngineArgs(
-            model="Qwen/Qwen2.5-3B-Instruct",
+            model=MODELO_ATUAL,
             dtype="half",
             gpu_memory_utilization=0.65, # Ajuste fino para sobrar VRAM pro Windows
-            max_model_len=1024,          # Mantém o cache baixo para não congelar
+            max_model_len=4096,          # Mantém o cache baixo para não congelar
             tensor_parallel_size=1,
             enforce_eager=True           # Bloqueia a compilação que trava o WSL2
         )
