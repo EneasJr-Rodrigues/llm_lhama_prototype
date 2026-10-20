@@ -77,3 +77,31 @@ docker exec -it ray-head-node serve run deploy:servico
 ## 📊 Acesso e Monitoramento
 - **API do LLM:** `http://<IP_DO_SERVIDOR_1>:8000/gerar`
 - **Dashboard do Ray:** `http://<IP_DO_SERVIDOR_1>:8265`
+- **Interface Chat (Streamlit):** `http://<IP_DO_SERVIDOR_1>:8501` (ou `http://localhost:8501` se rodando localmente)
+- **Painel de Evidências (Métricas):** Abra o arquivo local `dashboard.html` diretamente no seu navegador Windows.
+
+## 🖥️ Interface Gráfica e Testes de Estresse
+
+### 1. Interface Chatbot (Streamlit)
+Para subir a interface visual e interagir com o modelo de forma amigável, abra um novo terminal (após inicializar o modelo) e execute o processo em segundo plano:
+- **Ambiente Local:** `docker exec -d ray-local-test streamlit run chat_ui.py --server.address=0.0.0.0`
+- **Ambiente Produção (Head Node):** `docker exec -d ray-head-node streamlit run chat_ui.py --server.address=0.0.0.0`
+
+### 2. Testes de Carga e Performance
+Para validar a infraestrutura (Throughput e Latência), execute o script de estresse em um terminal separado. O script simulará requisições simultâneas e gerará um arquivo `.json` de evidências.
+- **Ambiente Local:** `docker exec -it ray-local-test python3 run_test.py --nome "teste_local" --reqs 5`
+- **Ambiente Produção:** `docker exec -it ray-head-node python3 run_test.py --nome "teste_prod" --reqs 5`
+
+*O arquivo gerado será salvo na pasta `/logs`. Basta arrastá-lo para dentro do seu `dashboard.html` para visualizar os gráficos de TPS.*
+
+### 3. Exemplos de Prompts para Homologação
+Utilize os exemplos abaixo no Streamlit ajustando a Temperatura e os Tokens para testar os limites do modelo:
+
+1. **Lógica e Abstração (Temperatura 0.1 - Respostas precisas):** 
+   > "Explique a diferença entre Docker e Máquina Virtual de forma simples, usando uma analogia com casas e condomínios."
+
+2. **Programação e Formatação (Temperatura 0.4 - Respostas estruturadas):** 
+   > "Escreva um script em Python que leia um arquivo de log '.txt', extraia todas as linhas que contenham a palavra 'ERROR' e salve em um novo arquivo."
+
+3. **Geração Corporativa (Temperatura 0.9 - Respostas criativas):** 
+   > "Escreva um e-mail profissional e persuasivo para a diretoria da CRP Tecnologia, justificando por que a arquitetura local com Ray e vLLM é estrategicamente superior a depender de APIs externas pagas."
