@@ -80,26 +80,28 @@ docker exec -it ray-head-node serve run deploy:servico
 - **Interface Chat (Streamlit):** `http://<IP_DO_SERVIDOR_1>:8501` (ou `http://localhost:8501` se rodando localmente)
 - **Painel de Evidências (Métricas):** Abra o arquivo local `dashboard.html` diretamente no seu navegador Windows.
 
+## ⚙️ Configuração do Ambiente (.env)
+Este projeto utiliza a arquitetura baseada em variáveis de ambiente para facilitar a troca de modelos e proteger credenciais (Metodologia 12-Factor). 
+
+Antes de iniciar qualquer ambiente (Local ou Produção), crie um arquivo chamado `.env` na raiz do projeto contendo:
+
+```env
+LLM_MODEL=meta-llama/Llama-3.1-8B-Instruct
+HF_TOKEN=seu_token_do_hugging_face
+```
+
 ## 🔄 Como Trocar de Modelo (Hot-Swap)
-A arquitetura foi construída de forma parametrizada. Para trocar o motor de inteligência artificial, você não precisa alterar o código, basta definir a variável de ambiente `LLM_MODEL` antes de iniciar o cluster.
+Para trocar o motor de inteligência artificial em toda a arquitetura, você não precisa alterar nenhuma linha de código.
+1. Pare a infraestrutura atual (se estiver rodando).
+2. Abra o arquivo `.env` e altere a variável `LLM_MODEL`.
+3. Suba a infraestrutura novamente (`./deploy.sh local` ou `./deploy.sh head`).
 
 ### Exemplos de Modelos Suportados
 * **Qwen 2.5 (3B):** `Qwen/Qwen2.5-3B-Instruct` (Ideal para testes locais com baixa VRAM).
 * **Llama 3.1 (8B):** `meta-llama/Llama-3.1-8B-Instruct` (Recomendado para produção nas GPUs V100).
 * **Gemma 2 (9B):** `google/gemma-2-9b-it` (Alternativa de alto desempenho).
 
-### Como executar a troca:
-1. Pare os contêineres atuais.
-2. Exporte a variável com o nome exato do repositório no Hugging Face:
-   ```bash
-   export LLM_MODEL="meta-llama/Llama-3.1-8B-Instruct"
-   ```
-3. Suba o ambiente novamente
-   ```bash
-   ./deploy.sh local   # Ou ./deploy.sh head (para produção)
-   ```
-
-O sistema fará o download do novo modelo automaticamente (armazenando no cache) e o Streamlit e o Dashboard atualizarão seus rótulos para o novo modelo ativo.
+O sistema fará o download do novo modelo automaticamente na inicialização. O Streamlit, a API e os relatórios de Teste de Carga adotarão o novo nome instantaneamente.
 
 ## 🖥️ Interface Gráfica e Testes de Estresse
 
