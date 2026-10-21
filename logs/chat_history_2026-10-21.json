@@ -1,0 +1,30 @@
+[
+    {
+        "timestamp": "2026-10-21 14:00:22",
+        "parametros": {
+            "temperatura": 0.0,
+            "max_tokens": 3050
+        },
+        "prompt": "Me explique um pouco sobre a teoria da relatividade ?",
+        "resposta_preview": " - Página 2 por Júlio César em Qui 12 Mar 2009 - 19:44 A teoria da relatividade de Einstein é uma teoria que se baseia em um princípio fundamental: a ...",
+        "metricas_reais": {
+            "latencia_segundos": 118.83,
+            "tokens_estimados": 2675,
+            "tps_local": 22.51
+        }
+    },
+    {
+        "timestamp": "2026-10-21 14:52:20",
+        "parametros": {
+            "temperatura": 0.0,
+            "max_tokens": 4050
+        },
+        "prompt": "Me explique um pouco sobre a teoria da relatividade, me de alguns exemplos ?",
+        "resposta_preview": "   Resposta: A teoria da relatividade de Einstein é composta por duas partes:  - Teoria da relatividade especial (1905):     - Explica a relação entre...",
+        "metricas_reais": {
+            "latencia_segundos": 162.66,
+            "tokens_estimados": 2899,
+            "tps_local": 17.82
+        }
+    }
+]
