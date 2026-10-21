@@ -93,16 +93,16 @@ for i, msg in enumerate(st.session_state.mensagens):
         
         # Se for o bot, exibe as métricas e os botões de feedback
         if msg["role"] == "assistant" and "metricas" in msg:
-            col1, col2, col3 = st.columns([4, 1, 1])
-            with col1:
-                st.caption(msg["metricas"])
+            st.caption(msg["metricas"]) # Métricas na linha de cima
             
-            # Botões de Qualidade
-            with col2:
+            # Cria colunas estreitas alinhadas à esquerda
+            col1, col2, col_vazia = st.columns([1.5, 2, 8])
+            
+            with col1:
                 if st.button("👍 Bom", key=f"up_{i}"):
                     atualizar_feedback_log(msg["id"], "Aprovado (Bom)")
                     st.toast("Feedback positivo registrado!")
-            with col3:
+            with col2:
                 if st.button("👎 Alucinou", key=f"down_{i}"):
                     atualizar_feedback_log(msg["id"], "Reprovado (Alucinação)")
                     st.toast("Alucinação registrada para auditoria!")
