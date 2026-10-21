@@ -152,7 +152,7 @@ if prompt_usuario := st.chat_input("Digite sua pergunta ou instrução..."):
             "temperature": temperatura,
             "max_tokens": max_tokens,
             "top_p": top_p,
-            "frequency_penalty": freq_penalty
+            "frequency_penalty": freq_penalty,
             "repetition_penalty": 1.15
         }
         
