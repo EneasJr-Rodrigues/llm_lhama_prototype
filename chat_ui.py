@@ -4,22 +4,21 @@ import requests
 import time
 import json
 import os
+import uuid  # Novo: Garante IDs únicos que nunca se repetem
 from datetime import datetime
 from rag_connector import RAGManager
 from sft_manager import MockSFTLoRA
-
-# Inicializa as arquiteturas
-rag = RAGManager(estrategia="mock")
-sft = MockSFTLoRA()
 
 URL_API = "http://127.0.0.1:8000/gerar"
 MODELO_ATUAL = os.getenv("LLM_MODEL", "Qwen/Qwen2.5-3B-Instruct")
 
 st.set_page_config(page_title="LLM Chat MVP", page_icon="🤖", layout="wide")
 
+rag = RAGManager(estrategia="mock")
+sft = MockSFTLoRA()
+
 # --- FUNÇÃO DE AUDITORIA (LOGS) ---
 def salvar_log_interacao(prompt, resposta, latencia, tokens, tps, temperatura, max_tokens, id_mensagem):
-    """Salva a interação inicial no log."""
     os.makedirs("/app/logs", exist_ok=True)
     hoje = datetime.now().strftime("%Y-%m-%d")
     arquivo_log = f"/app/logs/chat_history_{hoje}.json"
@@ -32,7 +31,7 @@ def salvar_log_interacao(prompt, resposta, latencia, tokens, tps, temperatura, m
         "prompt": prompt,
         "resposta_preview": resposta[:150].replace("\n", " ") + "...",
         "metricas_reais": {"latencia_segundos": latencia, "tokens_estimados": tokens, "tps_local": tps},
-        "feedback_humano": "Pendente" # Será atualizado quando o usuário clicar no botão
+        "feedback_humano": "Pendente"
     }
     
     logs = []
@@ -49,7 +48,6 @@ def salvar_log_interacao(prompt, resposta, latencia, tokens, tps, temperatura, m
         json.dump(logs, f, ensure_ascii=False, indent=4)
 
 def atualizar_feedback_log(id_mensagem, feedback):
-    """Atualiza o arquivo JSON com a avaliação do usuário."""
     hoje = datetime.now().strftime("%Y-%m-%d")
     arquivo_log = f"/app/logs/chat_history_{hoje}.json"
     
@@ -68,67 +66,59 @@ def atualizar_feedback_log(id_mensagem, feedback):
         except Exception as e:
             st.error(f"Erro ao salvar feedback: {e}")
 
-# Inicializa as variáveis na sessão
+# Inicializa o histórico
 if "mensagens" not in st.session_state:
     st.session_state.mensagens = []
-if "msg_counter" not in st.session_state:
-    st.session_state.msg_counter = 0
 
-# --- BARRA LATERAL (CONFIGURAÇÕES) ---
+# --- BARRA LATERAL ---
 with st.sidebar:
     st.image("https://img.shields.io/badge/vLLM-Ray_Cluster-00BCD4?style=for-the-badge", use_container_width=True)
     st.title("⚙️ Parâmetros do Modelo")
-    
     st.info(f"**🧠 Modelo Ativo:**\n`{MODELO_ATUAL}`")
     
-    temperatura = st.slider("🌡️ Temperatura (Criatividade)", min_value=0.0, max_value=2.0, value=0.6, step=0.1)
-    max_tokens = st.slider("📏 Máximo de Tokens", min_value=50, max_value=4096, value=1024, step=50)
-
+    temperatura = st.slider("🌡️ Temperatura (Criatividade)", min_value=0.0, max_value=2.0, value=0.4, step=0.1)
+    max_tokens = st.slider("📏 Máximo de Tokens", min_value=50, max_value=4096, value=2048, step=50)
+    
     st.markdown("---")
     st.title("🎛️ Pesos e SFT (LoRA)")
-    
-    # Simula a troca do adaptador LoRA em tempo real
     adaptador_ativo = st.selectbox("🎭 Adaptador SFT (Comportamento)", sft.listar_adaptadores())
-    
-    # Parâmetros matemáticos para levar o modelo ao limite
-    top_p = st.slider("🎯 Top-P (Foco de Vocabulário)", min_value=0.1, max_value=1.0, value=0.9, step=0.05,
-                      help="Limita o modelo a escolher palavras que somam X% de probabilidade. Menor = mais rígido.")
-    
-    freq_penalty = st.slider("♻️ Penalidade de Frequência", min_value=0.0, max_value=2.0, value=1.05, step=0.05,
-                             help="Punição pesada para palavras que o modelo já usou muito na resposta atual.")
+    top_p = st.slider("🎯 Top-P (Foco de Vocabulário)", min_value=0.1, max_value=1.0, value=0.9, step=0.05)
+    freq_penalty = st.slider("♻️ Penalidade de Frequência", min_value=0.0, max_value=2.0, value=1.05, step=0.05)
     
     if st.button("🗑️ Limpar Conversa", use_container_width=True):
         st.session_state.mensagens = []
         st.rerun()
 
-# --- TELA PRINCIPAL (CHAT) ---
+# --- TELA PRINCIPAL ---
 st.title("🤖 Chatbot de Homologação LLM")
 st.markdown("Ambiente de testes conectado ao cluster local.")
 
-# Renderiza o histórico de mensagens
 for i, msg in enumerate(st.session_state.mensagens):
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
         
-        # Se for o bot, exibe as métricas e os botões de feedback
         if msg["role"] == "assistant" and "metricas" in msg:
-            st.caption(msg["metricas"]) # Métricas na linha de cima
+            st.caption(msg["metricas"])
             
-            # Cria colunas estreitas alinhadas à esquerda
             col1, col2, col_vazia = st.columns([1.5, 2, 8])
             
+            # Lógica de bloqueio dos botões
+            ja_avaliou = msg.get("feedback") is not None
+            label_bom = "✅ Aprovado" if msg.get("feedback") == "bom" else "👍 Bom"
+            label_ruim = "❌ Reprovado" if msg.get("feedback") == "ruim" else "👎 Alucinou"
+            
             with col1:
-                if st.button("👍 Bom", key=f"up_{i}"):
+                if st.button(label_bom, key=f"up_{msg['id']}", disabled=ja_avaliou):
+                    msg["feedback"] = "bom"
                     atualizar_feedback_log(msg["id"], "Aprovado (Bom)")
-                    st.toast("Feedback positivo registrado!")
+                    st.rerun()
             with col2:
-                if st.button("👎 Alucinou", key=f"down_{i}"):
+                if st.button(label_ruim, key=f"down_{msg['id']}", disabled=ja_avaliou):
+                    msg["feedback"] = "ruim"
                     atualizar_feedback_log(msg["id"], "Reprovado (Alucinação)")
-                    st.toast("Alucinação registrada para auditoria!")
+                    st.rerun()
 
-# Caixa de input do usuário
 if prompt_usuario := st.chat_input("Digite sua pergunta ou instrução..."):
-    
     st.session_state.mensagens.append({"role": "user", "content": prompt_usuario})
     with st.chat_message("user"):
         st.markdown(prompt_usuario)
@@ -137,40 +127,22 @@ if prompt_usuario := st.chat_input("Digite sua pergunta ou instrução..."):
         placeholder_resposta = st.empty()
         placeholder_resposta.markdown("⏳ *Processando...*")
         
-        # Lê o System Prompt
         instrucoes_sistema = ""
         if os.path.exists("/app/system_prompt.txt"):
             with open("/app/system_prompt.txt", "r", encoding="utf-8") as f:
                 instrucoes_sistema = f.read()
-        
-        # 1. Lê o System Prompt de formatação
-        instrucoes_sistema = ""
-        if os.path.exists("/app/system_prompt.txt"):
-            with open("/app/system_prompt.txt", "r", encoding="utf-8") as f:
-                instrucoes_sistema = f.read()
-        
-        # 2. Busca informações internas baseadas na pergunta (RAG)
+                
         documento_interno = rag.obter_contexto(prompt_usuario)
-
-        # 2.1. Busca a máscara comportamental do SFT Mock
         mascara_sft = sft.aplicar_pesos(adaptador_ativo)
         
-        # 3. Monta o Super Prompt (System + RAG + Usuário)
-        prompt_enriquecido = f"""{instrucoes_sistema}
-        {mascara_sft}
-
-        INFORMAÇÃO INTERNA DA EMPRESA:
-        {documento_interno}
-
-        Pergunta do usuário: {prompt_usuario}"""
+        prompt_enriquecido = f"""{instrucoes_sistema}\n{mascara_sft}\n\nINFORMAÇÃO INTERNA DA EMPRESA:\n{documento_interno}\n\nPergunta do usuário: {prompt_usuario}"""
         
-        # Payload com os parâmetros levados ao limite
         payload = {
             "prompt": prompt_enriquecido,
             "temperature": temperatura,
             "max_tokens": max_tokens,
             "top_p": top_p,
-            "frequency_penalty": freq_penalty,  # Usa a nova variável do slider
+            "frequency_penalty": freq_penalty,
             "repetition_penalty": 1.15
         }
         
@@ -189,19 +161,18 @@ if prompt_usuario := st.chat_input("Digite sua pergunta ou instrução..."):
                 
                 placeholder_resposta.markdown(resposta_final)
                 
-                # Gera ID único para o log
-                st.session_state.msg_counter += 1
-                msg_id = f"msg_{st.session_state.msg_counter}"
+                msg_id = str(uuid.uuid4())
                 
                 st.session_state.mensagens.append({
                     "id": msg_id,
                     "role": "assistant", 
                     "content": resposta_final,
-                    "metricas": string_metricas
+                    "metricas": string_metricas,
+                    "feedback": None
                 })
                 
                 salvar_log_interacao(prompt_usuario, resposta_final, latencia, tokens_estimados, tps, temperatura, max_tokens, msg_id)
-                st.rerun() # Atualiza a tela para renderizar os botões
+                st.rerun()
                 
             else:
                 placeholder_resposta.error(f"Erro na API: {res.status_code}")

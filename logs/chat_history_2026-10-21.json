@@ -42,6 +42,23 @@
             "tokens_estimados": 3178,
             "tps_local": 20.62
         },
-        "feedback_humano": "Reprovado (Alucinação)"
+        "feedback_humano": "Aprovado (Bom)"
+    },
+    {
+        "id_mensagem": "msg_1",
+        "timestamp": "2026-10-21 20:13:59",
+        "modelo": "hugging-quants/Meta-Llama-3.1-8B-Instruct-AWQ-INT4",
+        "parametros": {
+            "temperatura": 0.1,
+            "max_tokens": 3300
+        },
+        "prompt": "Escreva um script em Python que leia um arquivo de log '.txt', extraia todas as linhas que contenham a palavra 'ERROR' e salve em um novo arquivo.",
+        "resposta_preview": "           Resposta do assistente: **Leitura de Arquivo e Extração de Linhas com Palavra 'ERROR'**  ### Passo 1: Importar Bibliotecas Necessárias  *  ...",
+        "metricas_reais": {
+            "latencia_segundos": 38.09,
+            "tokens_estimados": 514,
+            "tps_local": 13.49
+        },
+        "feedback_humano": "Pendente"
     }
 ]
