@@ -135,7 +135,17 @@ if prompt_usuario := st.chat_input("Digite sua pergunta ou instrução..."):
         documento_interno = rag.obter_contexto(prompt_usuario)
         mascara_sft = sft.aplicar_pesos(adaptador_ativo)
         
-        prompt_enriquecido = f"""{instrucoes_sistema}\n{mascara_sft}\n\nINFORMAÇÃO INTERNA DA EMPRESA:\n{documento_interno}\n\nPergunta do usuário: {prompt_usuario}"""
+        # Montagem do Super Prompt usando o Chat Template oficial do Llama 3
+        prompt_enriquecido = f"""<|begin_of_text|><|start_header_id|>system<|end_header_id|>
+
+        {instrucoes_sistema}
+        {mascara_sft}
+
+        INFORMAÇÃO INTERNA DA EMPRESA:
+        {documento_interno}<|eot_id|><|start_header_id|>user<|end_header_id|>
+
+        {prompt_usuario}<|eot_id|><|start_header_id|>assistant<|end_header_id|>
+        """
         
         payload = {
             "prompt": prompt_enriquecido,
@@ -143,7 +153,7 @@ if prompt_usuario := st.chat_input("Digite sua pergunta ou instrução..."):
             "max_tokens": max_tokens,
             "top_p": top_p,
             "frequency_penalty": freq_penalty
-            # "repetition_penalty": 1.15
+            "repetition_penalty": 1.15
         }
         
         inicio = time.time()

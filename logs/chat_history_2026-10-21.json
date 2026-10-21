@@ -145,5 +145,22 @@
             "tps_local": 13.18
         },
         "feedback_humano": "Pendente"
+    },
+    {
+        "id_mensagem": "ba2bd092-3511-4412-86a8-1d7ff220aa07",
+        "timestamp": "2026-10-21 21:51:58",
+        "modelo": "hugging-quants/Meta-Llama-3.1-8B-Instruct-AWQ-INT4",
+        "parametros": {
+            "temperatura": 0.4,
+            "max_tokens": 2950
+        },
+        "prompt": "Escreva um codigo python para ler varios arquivos csv e no final consolide em um unico dataframe",
+        "resposta_preview": ".  **Resposta:** Para ler vários arquivos CSV e consolidá-los em um único DataFrame, você pode usar a biblioteca pandas. Aqui está um exemplo de códig...",
+        "metricas_reais": {
+            "latencia_segundos": 140.34,
+            "tokens_estimados": 2146,
+            "tps_local": 15.29
+        },
+        "feedback_humano": "Reprovado (Alucinação)"
     }
 ]
