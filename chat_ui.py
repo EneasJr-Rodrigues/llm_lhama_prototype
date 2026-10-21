@@ -5,6 +5,12 @@ import time
 import json
 import os
 from datetime import datetime
+from rag_connector import RAGManager
+from sft_manager import MockSFTLoRA
+
+# Inicializa as arquiteturas
+rag = RAGManager(estrategia="mock")
+sft = MockSFTLoRA()
 
 URL_API = "http://127.0.0.1:8000/gerar"
 MODELO_ATUAL = os.getenv("LLM_MODEL", "Qwen/Qwen2.5-3B-Instruct")
@@ -77,6 +83,19 @@ with st.sidebar:
     
     temperatura = st.slider("🌡️ Temperatura (Criatividade)", min_value=0.0, max_value=2.0, value=0.6, step=0.1)
     max_tokens = st.slider("📏 Máximo de Tokens", min_value=50, max_value=4096, value=1024, step=50)
+
+    st.markdown("---")
+    st.title("🎛️ Pesos e SFT (LoRA)")
+    
+    # Simula a troca do adaptador LoRA em tempo real
+    adaptador_ativo = st.selectbox("🎭 Adaptador SFT (Comportamento)", sft.listar_adaptadores())
+    
+    # Parâmetros matemáticos para levar o modelo ao limite
+    top_p = st.slider("🎯 Top-P (Foco de Vocabulário)", min_value=0.1, max_value=1.0, value=0.9, step=0.05,
+                      help="Limita o modelo a escolher palavras que somam X% de probabilidade. Menor = mais rígido.")
+    
+    freq_penalty = st.slider("♻️ Penalidade de Frequência", min_value=0.0, max_value=2.0, value=1.05, step=0.05,
+                             help="Punição pesada para palavras que o modelo já usou muito na resposta atual.")
     
     if st.button("🗑️ Limpar Conversa", use_container_width=True):
         st.session_state.mensagens = []
@@ -124,13 +143,34 @@ if prompt_usuario := st.chat_input("Digite sua pergunta ou instrução..."):
             with open("/app/system_prompt.txt", "r", encoding="utf-8") as f:
                 instrucoes_sistema = f.read()
         
-        prompt_enriquecido = f"{instrucoes_sistema}\n\nPergunta do usuário: {prompt_usuario}"
+        # 1. Lê o System Prompt de formatação
+        instrucoes_sistema = ""
+        if os.path.exists("/app/system_prompt.txt"):
+            with open("/app/system_prompt.txt", "r", encoding="utf-8") as f:
+                instrucoes_sistema = f.read()
         
-        # Payload completo
+        # 2. Busca informações internas baseadas na pergunta (RAG)
+        documento_interno = rag.obter_contexto(prompt_usuario)
+
+        # 2.1. Busca a máscara comportamental do SFT Mock
+        mascara_sft = sft.aplicar_pesos(adaptador_ativo)
+        
+        # 3. Monta o Super Prompt (System + RAG + Usuário)
+        prompt_enriquecido = f"""{instrucoes_sistema}
+        {mascara_sft}
+
+        INFORMAÇÃO INTERNA DA EMPRESA:
+        {documento_interno}
+
+        Pergunta do usuário: {prompt_usuario}"""
+        
+        # Payload com os parâmetros levados ao limite
         payload = {
             "prompt": prompt_enriquecido,
             "temperature": temperatura,
             "max_tokens": max_tokens,
+            "top_p": top_p,
+            "frequency_penalty": freq_penalty,  # Usa a nova variável do slider
             "repetition_penalty": 1.15
         }
         

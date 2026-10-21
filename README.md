@@ -81,7 +81,7 @@ docker exec -it ray-head-node serve run deploy:servico
 - **Painel de Evidências (Métricas):** Abra o arquivo local `dashboard.html` diretamente no seu navegador Windows.
 
 ## ⚙️ Configuração do Ambiente (.env)
-Este projeto utiliza a arquitetura baseada em variáveis de ambiente para facilitar a troca de modelos e proteger credenciais (Metodologia 12-Factor). 
+Este projeto utiliza a arquitetura baseada em variáveis de ambiente para facilitar a troca de modelos e proteger credenciais (Metodologia 12-Factor).
 
 Antes de iniciar qualquer ambiente (Local ou Produção), crie um arquivo chamado `.env` na raiz do projeto contendo:
 
@@ -102,6 +102,20 @@ Para trocar o motor de inteligência artificial em toda a arquitetura, você nã
 * **Gemma 2 (9B):** `google/gemma-2-9b-it` (Alternativa de alto desempenho).
 
 O sistema fará o download do novo modelo automaticamente na inicialização. O Streamlit, a API e os relatórios de Teste de Carga adotarão o novo nome instantaneamente.
+
+## 🧠 Arquitetura Cognitiva (RAG & SFT)
+Esta infraestrutura está preparada para ir além do modelo base (Zero-Shot), suportando as duas principais abordagens de otimização corporativa do mercado:
+
+### 1. RAG (Retrieval-Augmented Generation)
+Objetivo: Adicionar conhecimento sem retreinar o modelo.
+* Como funciona: O sistema pesquisa as bases de dados e documentos privados da CRP Tecnologia (via SQL Server ou Buckets) e injeta o contexto exato e atualizado diretamente na requisição do usuário.
+* Vantagem: Zera a taxa de alucinação para informações corporativas. O LLM atua apenas como o intérprete da informação fornecida, garantindo que as respostas sejam factuais e baseadas nas regras de negócio da empresa.
+
+### 2. SFT (Supervised Fine-Tuning) via LoRA
+Objetivo: Alterar o comportamento e o formato da resposta.
+
+* Como funciona: Utiliza a técnica de Adaptação de Baixo Posto (LoRA) para injetar pequenos arquivos de "pesos neurais" (adaptadores de poucos megabytes) por cima do modelo base no motor vLLM.
+* Vantagem: Ensina ao modelo o jargão técnico da empresa, impõe formatação estrita (ex: forçar respostas em JSON puro) ou altera radicalmente o tom de voz (ex: suporte técnico, análise jurídica), sem o custo milionário de treinar um LLM inteiro do zero.
 
 ## 🖥️ Interface Gráfica e Testes de Estresse
 
