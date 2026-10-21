@@ -60,5 +60,90 @@
             "tps_local": 13.49
         },
         "feedback_humano": "Pendente"
+    },
+    {
+        "id_mensagem": "ade0e198-1516-4f6a-84a0-8c88b3bde4cd",
+        "timestamp": "2026-10-21 21:06:46",
+        "modelo": "hugging-quants/Meta-Llama-3.1-8B-Instruct-AWQ-INT4",
+        "parametros": {
+            "temperatura": 0.2,
+            "max_tokens": 3150
+        },
+        "prompt": "Escreva um script em Python que leia um arquivo de log '.txt', extraia todas as linhas que contenham a palavra 'ERROR' e salve em um novo arquivo.",
+        "resposta_preview": "   **Resposta do assistente:**  Para realizar essa tarefa, você pode usar o seguinte script em Python: ```python import re  # Abra o arquivo de log wi...",
+        "metricas_reais": {
+            "latencia_segundos": 142.33,
+            "tokens_estimados": 2161,
+            "tps_local": 15.18
+        },
+        "feedback_humano": "Pendente"
+    },
+    {
+        "id_mensagem": "dc0ff947-7a8f-472b-975c-0bd398294c43",
+        "timestamp": "2026-10-21 21:16:37",
+        "modelo": "hugging-quants/Meta-Llama-3.1-8B-Instruct-AWQ-INT4",
+        "parametros": {
+            "temperatura": 0.1,
+            "max_tokens": 2048
+        },
+        "prompt": "Escreva um script em Python que leia um arquivo de log '.txt', extraia todas as linhas que contenham a palavra 'ERROR' e salve em um novo arquivo.",
+        "resposta_preview": "   **Resposta:**  Para realizar essa tarefa, você pode utilizar o seguinte script em Python: ```python import re  # Abra o arquivo de log with open('a...",
+        "metricas_reais": {
+            "latencia_segundos": 91.49,
+            "tokens_estimados": 1439,
+            "tps_local": 15.73
+        },
+        "feedback_humano": "Aprovado (Bom)"
+    },
+    {
+        "id_mensagem": "0f390782-e00d-4d7c-a6e7-6f38676e6851",
+        "timestamp": "2026-10-21 21:20:14",
+        "modelo": "hugging-quants/Meta-Llama-3.1-8B-Instruct-AWQ-INT4",
+        "parametros": {
+            "temperatura": 0.2,
+            "max_tokens": 2048
+        },
+        "prompt": "Escreva um script em Python que leia um arquivo de log '.txt', extraia todas as linhas que contenham a palavra 'ERROR' e salve em um novo arquivo.",
+        "resposta_preview": "   **Resposta:** **Script de Extração de Linhas com Palavra 'ERROR'** ```python import re  def extrair_linhas_com_error(arquivo_log):     # Abre o arq...",
+        "metricas_reais": {
+            "latencia_segundos": 89.0,
+            "tokens_estimados": 1426,
+            "tps_local": 16.02
+        },
+        "feedback_humano": "Reprovado (Alucinação)"
+    },
+    {
+        "id_mensagem": "78b4248d-3f1a-4c30-876b-4a0dc50c11f5",
+        "timestamp": "2026-10-21 21:29:12",
+        "modelo": "hugging-quants/Meta-Llama-3.1-8B-Instruct-AWQ-INT4",
+        "parametros": {
+            "temperatura": 0.2,
+            "max_tokens": 2048
+        },
+        "prompt": "Escreva um script em Python que leia um arquivo de log '.txt', extraia todas as linhas que contenham a palavra 'ERROR' e salve em um novo arquivo.",
+        "resposta_preview": "   **Resposta do assistente corporativo:** Para realizar essa tarefa, você pode utilizar o seguinte script em Python:  ```python import re  # Abra o a...",
+        "metricas_reais": {
+            "latencia_segundos": 89.97,
+            "tokens_estimados": 1397,
+            "tps_local": 15.53
+        },
+        "feedback_humano": "Reprovado (Alucinação)"
+    },
+    {
+        "id_mensagem": "d4c764c1-4e1a-4cce-896f-feecd00dee87",
+        "timestamp": "2026-10-21 21:34:38",
+        "modelo": "hugging-quants/Meta-Llama-3.1-8B-Instruct-AWQ-INT4",
+        "parametros": {
+            "temperatura": 0.1,
+            "max_tokens": 2048
+        },
+        "prompt": "Escreva um script em Python que leia um arquivo de log '.txt', extraia todas as linhas que contenham a palavra 'ERROR' e salve em um novo arquivo.",
+        "resposta_preview": "   **Resposta:** Para realizar essa tarefa, você pode usar o seguinte script em Python:  ```python import re  # Abra o arquivo de log with open('arqui...",
+        "metricas_reais": {
+            "latencia_segundos": 89.18,
+            "tokens_estimados": 1175,
+            "tps_local": 13.18
+        },
+        "feedback_humano": "Pendente"
     }
 ]
