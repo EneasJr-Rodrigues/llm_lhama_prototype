@@ -1,0 +1,70 @@
+[
+    {
+        "id_mensagem": "98508aeb-88e7-449e-bfef-e9c9c040af1a",
+        "timestamp": "2026-10-22 12:28:46",
+        "modelo": "hugging-quants/Meta-Llama-3.1-8B-Instruct-AWQ-INT4",
+        "parametros": {
+            "temperatura": 0.1,
+            "max_tokens": 2600
+        },
+        "prompt": "Me explique resumidamente, um pouco sobre a teoria da relatividade ?",
+        "resposta_preview": " Desculpe, mas não tenho acesso a informações sobre a validação da teoria da relatividade pela CRP Tecnologia. No entanto, posso explicar a teoria da ...",
+        "metricas_reais": {
+            "latencia_segundos": 13.27,
+            "tokens_estimados": 223,
+            "tps_local": 16.8
+        },
+        "feedback_humano": "Aprovado (Bom)"
+    },
+    {
+        "id_mensagem": "83b0347f-8712-4e19-b4c5-739640b4c747",
+        "timestamp": "2026-10-22 12:29:24",
+        "modelo": "hugging-quants/Meta-Llama-3.1-8B-Instruct-AWQ-INT4",
+        "parametros": {
+            "temperatura": 0.1,
+            "max_tokens": 2600
+        },
+        "prompt": "Me explique sobre a teoria do caos ?",
+        "resposta_preview": " Desculpe, mas não tenho informações sobre a teoria do caos....",
+        "metricas_reais": {
+            "latencia_segundos": 1.23,
+            "tokens_estimados": 13,
+            "tps_local": 10.57
+        },
+        "feedback_humano": "Aprovado (Bom)"
+    },
+    {
+        "id_mensagem": "eab15201-87cd-4498-8fc8-491a23a68fb4",
+        "timestamp": "2026-10-22 12:29:51",
+        "modelo": "hugging-quants/Meta-Llama-3.1-8B-Instruct-AWQ-INT4",
+        "parametros": {
+            "temperatura": 0.1,
+            "max_tokens": 2600
+        },
+        "prompt": "Me explique sobre a teoria de varios mundos ?",
+        "resposta_preview": " Desculpe, mas não tenho informações sobre a teoria dos vários mundos....",
+        "metricas_reais": {
+            "latencia_segundos": 1.13,
+            "tokens_estimados": 14,
+            "tps_local": 12.39
+        },
+        "feedback_humano": "Aprovado (Bom)"
+    },
+    {
+        "id_mensagem": "a08e56ba-62c2-46ce-89eb-3cd0eb3fa3b6",
+        "timestamp": "2026-10-22 12:30:20",
+        "modelo": "hugging-quants/Meta-Llama-3.1-8B-Instruct-AWQ-INT4",
+        "parametros": {
+            "temperatura": 0.1,
+            "max_tokens": 2600
+        },
+        "prompt": "Me explique um pouco sobre teorema de pitagoras ?",
+        "resposta_preview": " Desculpe-me, mas não tenho acesso a informações específicas sobre o teorema de Pitágoras....",
+        "metricas_reais": {
+            "latencia_segundos": 1.46,
+            "tokens_estimados": 16,
+            "tps_local": 10.96
+        },
+        "feedback_humano": "Reprovado (Alucinação)"
+    }
+]

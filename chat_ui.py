@@ -142,7 +142,9 @@ if prompt_usuario := st.chat_input("Digite sua pergunta ou instrução..."):
         {mascara_sft}
 
         INFORMAÇÃO INTERNA DA EMPRESA:
-        {documento_interno}<|eot_id|><|start_header_id|>user<|end_header_id|>
+        {documento_interno}
+
+        Instrução Adicional: Se a 'INFORMAÇÃO INTERNA' disser que não há documentos, você tem permissão para usar seu conhecimento geral de mundo para responder à pergunta do usuário da melhor forma possível.<|eot_id|><|start_header_id|>user<|end_header_id|>
 
         {prompt_usuario}<|eot_id|><|start_header_id|>assistant<|end_header_id|>
         """
