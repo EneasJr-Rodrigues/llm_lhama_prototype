@@ -9,6 +9,7 @@ services:
     ports:
       - "8000:8000"
       - "8501:8501"
+      - "8080:8080"
     volumes:
       - /mnt/e/WSL/llm_cache:/app/model_cache
       - ./logs:/app/logs
