@@ -151,5 +151,22 @@
             "tps_local": 15.8
         },
         "feedback_humano": "Aprovado (Bom)"
+    },
+    {
+        "id_mensagem": "27d70f16-ecc3-4192-a0d6-dd4b21fc364e",
+        "timestamp": "2026-10-22 20:45:29",
+        "modelo": "hugging-quants/Meta-Llama-3.1-8B-Instruct-AWQ-INT4",
+        "parametros": {
+            "temperatura": 0.1,
+            "max_tokens": 3250
+        },
+        "prompt": "Me explique um pouco sobre o teorema de pitagoras ?",
+        "resposta_preview": " O Teorema de Pitágoras é uma relação fundamental na geometria, que relaciona as medidas dos lados de um triângulo retângulo....",
+        "metricas_reais": {
+            "latencia_segundos": 9.51,
+            "tokens_estimados": 26,
+            "tps_local": 2.73
+        },
+        "feedback_humano": "Aprovado (Bom)"
     }
 ]
