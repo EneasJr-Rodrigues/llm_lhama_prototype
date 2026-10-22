@@ -14,6 +14,7 @@ services:
       - /mnt/e/WSL/llm_cache:/app/model_cache
       - ./logs:/app/logs
       - ./system_prompt.txt:/app/system_prompt.txt
+      - ./dashboard.html:/app/dashboard.html
     env_file:
       - .env
     environment:

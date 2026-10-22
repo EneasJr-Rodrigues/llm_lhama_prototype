@@ -27,7 +27,7 @@ RUN pip3 install --no-cache-dir prometheus_client streamlit requests
 WORKDIR /app
 
 # Copia o script Python de deployment (que criaremos abaixo)
-COPY *.py /app/
+COPY *.py *.html /app/
 
 # Expõe as portas: 
 # 6379 (Comunicação do Cluster Ray)

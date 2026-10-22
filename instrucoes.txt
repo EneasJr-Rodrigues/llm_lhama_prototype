@@ -1,0 +1,17 @@
+## local
+
+./deploy.sh local
+docker exec -it ray-local-test serve run deploy_local:servico
+
+## instrucoes de down of docker
+docker compose -f docker-compose-local.yml down
+
+
+docker exec -d ray-local-test streamlit run chat_ui.py --server.address=0.0.0.0
+docker exec -d ray-local-test python3 -m http.server 8080 --bind 0.0.0.0
+
+## chat_ui
+http://localhost:8501/
+
+## dashboard
+http://localhost:8080/dashboard.html
