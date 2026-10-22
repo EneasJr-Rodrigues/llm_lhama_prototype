@@ -7,6 +7,10 @@ services:
     command: ray start --head --port=6379 --dashboard-host=0.0.0.0 --block
     network_mode: "host"
     shm_size: '16gb'
+    ports:
+      - "8000:8000"
+      - "8501:8501"
+      - "8080:8080"
     environment:
       - LLM_MODEL=${LLM_MODEL}
       - HF_TOKEN=${HF_TOKEN}

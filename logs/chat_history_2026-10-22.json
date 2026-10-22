@@ -66,5 +66,90 @@
             "tps_local": 10.96
         },
         "feedback_humano": "Reprovado (Alucinação)"
+    },
+    {
+        "id_mensagem": "9732363b-b81b-4aaa-ae18-472ad5b41aa6",
+        "timestamp": "2026-10-22 14:04:56",
+        "modelo": "hugging-quants/Meta-Llama-3.1-8B-Instruct-AWQ-INT4",
+        "parametros": {
+            "temperatura": 0.1,
+            "max_tokens": 3750
+        },
+        "prompt": "Me explique um pouco sobre a teoria do caos",
+        "resposta_preview": " Entendo que você está interessado na teoria do caos. Aqui está uma visão geral sobre o assunto:  A teoria do caos é uma área da matemática que estuda...",
+        "metricas_reais": {
+            "latencia_segundos": 25.59,
+            "tokens_estimados": 292,
+            "tps_local": 11.41
+        },
+        "feedback_humano": "Aprovado (Bom)"
+    },
+    {
+        "id_mensagem": "7d32b9ed-cdb2-4960-87b7-258c1473b90d",
+        "timestamp": "2026-10-22 14:30:58",
+        "modelo": "hugging-quants/Meta-Llama-3.1-8B-Instruct-AWQ-INT4",
+        "parametros": {
+            "temperatura": 0.1,
+            "max_tokens": 3750
+        },
+        "prompt": "Me explique um pouco sobre a teoria de varios mundos",
+        "resposta_preview": " Desculpe-me, mas não tenho acesso a informações específicas sobre a teoria de vários mundos da nossa empresa. No entanto, posso explicar a teoria de ...",
+        "metricas_reais": {
+            "latencia_segundos": 26.15,
+            "tokens_estimados": 391,
+            "tps_local": 14.95
+        },
+        "feedback_humano": "Aprovado (Bom)"
+    },
+    {
+        "id_mensagem": "885ce5cb-fcd5-41dc-ad01-e8c995dce868",
+        "timestamp": "2026-10-22 14:32:51",
+        "modelo": "hugging-quants/Meta-Llama-3.1-8B-Instruct-AWQ-INT4",
+        "parametros": {
+            "temperatura": 0.1,
+            "max_tokens": 3750
+        },
+        "prompt": "Me indique um livro bom de ficção e terror ? me de o nome do autor também",
+        "resposta_preview": " Eu não tenho acesso a informações internas da empresa sobre livros de ficção e terror....",
+        "metricas_reais": {
+            "latencia_segundos": 1.49,
+            "tokens_estimados": 19,
+            "tps_local": 12.75
+        },
+        "feedback_humano": "Aprovado (Bom)"
+    },
+    {
+        "id_mensagem": "3d3c1735-9d9a-443c-bda1-263c2dcf2960",
+        "timestamp": "2026-10-22 14:34:00",
+        "modelo": "hugging-quants/Meta-Llama-3.1-8B-Instruct-AWQ-INT4",
+        "parametros": {
+            "temperatura": 0.1,
+            "max_tokens": 3750
+        },
+        "prompt": "Quem foi Edgar Allan Poe?",
+        "resposta_preview": " Desculpe por qualquer inconveniente. Infelizmente, não tenho acesso a informações internas sobre a pergunta. No entanto, posso fornecer informações g...",
+        "metricas_reais": {
+            "latencia_segundos": 11.37,
+            "tokens_estimados": 145,
+            "tps_local": 12.75
+        },
+        "feedback_humano": "Aprovado (Bom)"
+    },
+    {
+        "id_mensagem": "03992d24-a35a-4a96-9c6e-8eecffcdcbf1",
+        "timestamp": "2026-10-22 14:37:42",
+        "modelo": "hugging-quants/Meta-Llama-3.1-8B-Instruct-AWQ-INT4",
+        "parametros": {
+            "temperatura": 0.1,
+            "max_tokens": 3750
+        },
+        "prompt": "Quem foi Pedro Alvares Cabral e qual foi sua importância ?",
+        "resposta_preview": " Desculpe por qualquer transtorno. Como não há informações internas disponíveis sobre a pergunta, vou fornecer uma resposta baseada em meu conheciment...",
+        "metricas_reais": {
+            "latencia_segundos": 14.81,
+            "tokens_estimados": 234,
+            "tps_local": 15.8
+        },
+        "feedback_humano": "Aprovado (Bom)"
     }
 ]

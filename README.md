@@ -78,7 +78,38 @@ docker exec -it ray-head-node serve run deploy:servico
 - **API do LLM:** `http://<IP_DO_SERVIDOR_1>:8000/gerar`
 - **Dashboard do Ray:** `http://<IP_DO_SERVIDOR_1>:8265`
 - **Interface Chat (Streamlit):** `http://<IP_DO_SERVIDOR_1>:8501` (ou `http://localhost:8501` se rodando localmente)
-- **Painel de Evidências (Métricas):** Abra o arquivo local `dashboard.html` diretamente no seu navegador Windows.
+- **Painel de Evidências (Métricas Corporativas):** `http://<IP_DO_SERVIDOR_1>:8080/dashboard.html` (Requer inicialização do servidor web embutido, veja abaixo).
+---
+
+## 🖥️ Interface Gráfica, Painéis e Testes de Estresse
+
+### 1. Interface Chatbot (Streamlit)
+Para subir a interface visual e interagir com o modelo, execute o processo em segundo plano no terminal do Head Node:
+```bash
+docker exec -d ray-head-node streamlit run chat_ui.py --server.address=0.0.0.0
+```
+
+### 2. Hospedando o Painel de Evidências (Métricas)
+Como servidores não possuem interface visual para abrir arquivos locais, você precisa transformar o seu arquivo `dashboard.html` em uma página web real acessível pela rede da empresa.
+
+* Certifique-se de que a porta `8080` está exposta no seu `docker-compose-head.yml`.
+* Execute o servidor web nativo do Python em segundo plano no Head Node:
+
+```bash
+docker exec -d ray-head-node python3 -m http.server 8080 --bind 0.0.0.0
+```
+
+Após executar este comando, o seu painel gerencial estará online e acessível no navegador pelo IP do servidor na porta 8080.
+
+```bash
+docker exec -it ray-head-node python3 run_test.py --nome "teste_prod" --reqs 50
+```
+
+Após a conclusão, acesse o seu Painel de Evidências no navegador e carregue o arquivo JSON recém-gerado para visualizar os gráficos de TPS.
+
+### 3. Testes de Carga e Performance (Terminal)
+
+Para validar a infraestrutura (Throughput e Latência) em ambientes headless, execute o script de estresse. O script simulará requisições simultâneas e gerará um arquivo `.json` de evidências de forma silenciosa na pasta `/logs`.
 
 ## ⚙️ Configuração do Ambiente (.env)
 Este projeto utiliza a arquitetura baseada em variáveis de ambiente para facilitar a troca de modelos e proteger credenciais (Metodologia 12-Factor).
