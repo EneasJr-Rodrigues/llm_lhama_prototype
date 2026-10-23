@@ -1,92 +1,109 @@
 {
     "versao_teste": "teste_local",
-    "data_execucao": "2026-10-22 20:53:39",
+    "data_execucao": "2026-10-23 11:52:23",
     "modelo_alvo": "hugging-quants/Meta-Llama-3.1-8B-Instruct-AWQ-INT4",
+    "hardware_telemetria": {
+        "gpu_temp_c": 42,
+        "gpu_power_w": 35.82,
+        "cpu_temp_c": 0,
+        "estrangulamento_termico": false
+    },
     "resumo_metricas": {
         "total_requisicoes": 10,
-        "throughput_total_tps": 16.46,
-        "latencia_media_segundos": 24.32,
-        "tempo_total_segundos": 243.22
+        "throughput_total_tps": 15.2,
+        "latencia_media_segundos": 26.4,
+        "ttft_medio_segundos": 26.404,
+        "tempo_total_segundos": 264.04
     },
     "logs_detalhados": [
         {
             "requisicao_id": 1,
             "status": "Sucesso",
-            "latencia_segundos": 26.93,
+            "latencia_segundos": 27.75,
+            "ttft_segundos": 27.747,
             "tokens_gerados": 413,
-            "tps_local": 15.34,
-            "resposta_preview": " A Inteligência Artificial (IA) refere-se a um campo da inte..."
+            "tps_local": 14.88,
+            "resposta_preview": " A Inteligência Artificial (IA) é uma área de estudo que vis..."
         },
         {
             "requisicao_id": 2,
             "status": "Sucesso",
-            "latencia_segundos": 24.2,
-            "tokens_gerados": 408,
-            "tps_local": 16.86,
-            "resposta_preview": " A Inteligência Artificial é um campo da ciência da computaç..."
+            "latencia_segundos": 22.62,
+            "ttft_segundos": 22.623,
+            "tokens_gerados": 419,
+            "tps_local": 18.52,
+            "resposta_preview": " A Inteligência Artificial (IA) refere-se a um campo da inte..."
         },
         {
             "requisicao_id": 3,
             "status": "Sucesso",
-            "latencia_segundos": 24.65,
-            "tokens_gerados": 388,
-            "tps_local": 15.74,
-            "resposta_preview": " “A Inteligência Artificial (IA) é uma subárea da Inteligênc..."
+            "latencia_segundos": 22.51,
+            "ttft_segundos": 22.51,
+            "tokens_gerados": 408,
+            "tps_local": 18.13,
+            "resposta_preview": " A Inteligência Artificial é um campo da ciência da computaç..."
         },
         {
             "requisicao_id": 4,
             "status": "Sucesso",
-            "latencia_segundos": 24.8,
-            "tokens_gerados": 418,
-            "tps_local": 16.85,
-            "resposta_preview": " A Inteligência Artificial (IA) é uma área da ciência da com..."
+            "latencia_segundos": 22.57,
+            "ttft_segundos": 22.566,
+            "tokens_gerados": 388,
+            "tps_local": 17.19,
+            "resposta_preview": " “A Inteligência Artificial (IA) é uma subárea da Inteligênc..."
         },
         {
             "requisicao_id": 5,
             "status": "Sucesso",
-            "latencia_segundos": 23.71,
-            "tokens_gerados": 377,
-            "tps_local": 15.9,
-            "resposta_preview": "  A Inteligência Artificial (IA) é um campo da ciência que b..."
+            "latencia_segundos": 22.46,
+            "ttft_segundos": 22.465,
+            "tokens_gerados": 418,
+            "tps_local": 18.61,
+            "resposta_preview": " A Inteligência Artificial (IA) é uma área da ciência da com..."
         },
         {
             "requisicao_id": 6,
             "status": "Sucesso",
-            "latencia_segundos": 23.61,
-            "tokens_gerados": 392,
-            "tps_local": 16.6,
-            "resposta_preview": " O que é Inteligência Artificial (IA)? A Inteligência Artifi..."
+            "latencia_segundos": 24.26,
+            "ttft_segundos": 24.263,
+            "tokens_gerados": 377,
+            "tps_local": 15.54,
+            "resposta_preview": "  A Inteligência Artificial (IA) é um campo da ciência que b..."
         },
         {
             "requisicao_id": 7,
             "status": "Sucesso",
-            "latencia_segundos": 23.89,
-            "tokens_gerados": 410,
-            "tps_local": 17.16,
-            "resposta_preview": " Você pode incluir exemplos, desde que sejam coerentes com a..."
+            "latencia_segundos": 41.13,
+            "ttft_segundos": 41.126,
+            "tokens_gerados": 392,
+            "tps_local": 9.53,
+            "resposta_preview": " O que é Inteligência Artificial (IA)? A Inteligência Artifi..."
         },
         {
             "requisicao_id": 8,
             "status": "Sucesso",
-            "latencia_segundos": 23.84,
+            "latencia_segundos": 25.99,
+            "ttft_segundos": 25.993,
             "tokens_gerados": 412,
-            "tps_local": 17.28,
+            "tps_local": 15.85,
             "resposta_preview": " A Inteligência Artificial (IA) refere-se a um campo da ciên..."
         },
         {
             "requisicao_id": 9,
             "status": "Sucesso",
-            "latencia_segundos": 23.7,
+            "latencia_segundos": 27.17,
+            "ttft_segundos": 27.174,
             "tokens_gerados": 404,
-            "tps_local": 17.05,
+            "tps_local": 14.87,
             "resposta_preview": " Em resumo, a Inteligência Artificial (IA) é uma disciplina ..."
         },
         {
             "requisicao_id": 10,
             "status": "Sucesso",
-            "latencia_segundos": 23.87,
+            "latencia_segundos": 27.57,
+            "ttft_segundos": 27.572,
             "tokens_gerados": 382,
-            "tps_local": 16.0,
+            "tps_local": 13.86,
             "resposta_preview": " A inteligência artificial (IA) é uma área da ciência da com..."
         }
     ]

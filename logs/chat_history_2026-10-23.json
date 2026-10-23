@@ -1,0 +1,19 @@
+[
+    {
+        "id_mensagem": "e533bb68-630a-45c2-800d-2073085970a0",
+        "timestamp": "2026-10-23 11:51:22",
+        "modelo": "hugging-quants/Meta-Llama-3.1-8B-Instruct-AWQ-INT4",
+        "parametros": {
+            "temperatura": 0.1,
+            "max_tokens": 3250
+        },
+        "prompt": "Crie uma função em java para ler um arquivo csv e exibir as 5 primeiras linhas no prompt",
+        "resposta_preview": " Desculpe por qualquer transtorno. Aqui está uma função em Java para ler um arquivo CSV e exibir as 5 primeiras linhas:  **Lendo Arquivo CSV em Java**...",
+        "metricas_reais": {
+            "latencia_segundos": 38.51,
+            "tokens_estimados": 401,
+            "tps_local": 10.41
+        },
+        "feedback_humano": "Aprovado (Bom)"
+    }
+]
